@@ -1,12 +1,12 @@
 # Базовый образ
 FROM bitnami/kafka:latest
 
-# Устанавливаем переменные среды
+#переменные среды
 ENV KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
 ENV ALLOW_PLAINTEXT_LISTENER=yes
 
-# Открываем порты Kafka
+#открываем порты для Kafka
 EXPOSE 9092
 
-# Запуск Kafka при старте контейнера
+# Запускаем Kafka при старте контейнера
 CMD ["/opt/bitnami/scripts/kafka/run.sh"]
