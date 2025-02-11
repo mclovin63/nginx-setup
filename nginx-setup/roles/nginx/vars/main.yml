@@ -1,0 +1,2 @@
+worker_connections: 1024
+client_max_body_size: 50M

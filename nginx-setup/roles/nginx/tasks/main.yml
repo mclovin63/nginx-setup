@@ -1,0 +1,46 @@
+- name: Добавление репозитория PHP 7.4
+  apt_repository:
+    repo: "ppa:ondrej/php"
+    state: present
+
+- name: Обновление списка пакетов
+  apt:
+    update_cache: yes
+
+- name: Установка Nginx, PHP 7.4-FPM, Certbot
+  apt:
+    name:
+      - nginx
+      - php7.4
+      - php7.4-fpm
+      - php7.4-mysql
+      - certbot
+      - python3-certbot-nginx
+    state: present
+
+- name: Копирование конфигурации Nginx
+  template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+  notify: Перезапуск Nginx
+
+- name: Проверка конфигурации Nginx
+  command: nginx -t
+  register: nginx_test
+  changed_when: false
+
+- name: Вывод результата теста конфигурации Nginx
+  debug:
+    msg: "{{ nginx_test.stdout_lines }}"
+
+- name: Убедиться, что PHP-FPM работает
+  service:
+    name: php7.4-fpm
+    state: restarted
+    enabled: yes
+
+- name: Перезапуск Nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

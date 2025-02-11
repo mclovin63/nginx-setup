@@ -1,0 +1,6 @@
+- name: Установка и настройка Nginx + PHP-FPM 7.4
+  hosts: testservers
+  become: true
+
+  roles:
+    - nginx
